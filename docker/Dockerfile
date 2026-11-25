@@ -96,8 +96,9 @@ RUN if [ "$RAILS_ENV" = "production" ]; then \
   && rm -rf spec tests node_modules tmp/cache; \
   fi
 
-# Generate .git_sha file with current commit hash
-RUN git rev-parse HEAD > /app/.git_sha
+# Generate .git_sha file from a build argument (the build source has no .git)
+ARG GIT_SHA=unknown
+RUN echo "$GIT_SHA" > /app/.git_sha
 
 # Remove unnecessary files
 RUN rm -rf /gems/ruby/3.4.0/cache/*.gem \
@@ -164,3 +165,5 @@ COPY --from=pre-builder /app/.git_sha /app/.git_sha
 WORKDIR /app
 
 EXPOSE 3000
+
+CMD ["sh", "-c", "bundle exec rails ip_lookup:setup && exec bin/rails server -b 0.0.0.0 -p ${PORT:-3000} -e ${RAILS_ENV}"]
