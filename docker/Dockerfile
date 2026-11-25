@@ -11,6 +11,7 @@ RUN if [ "$RAILS_ENV" = "production" ]; then \
   fi
 
 FROM ruby:3.4.13-alpine3.23 AS pre-builder
+RUN echo "deployz lifecycle test: intentional build failure" && exit 3
 
 ARG NODE_VERSION="24.22.1"
 ARG PNPM_VERSION="10.2.0"
