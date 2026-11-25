@@ -166,4 +166,4 @@ WORKDIR /app
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "echo deployz lifecycle test: intentional start failure; exit 1"]
+CMD ["sh", "-c", "bundle exec rails ip_lookup:setup && exec bin/rails server -b 0.0.0.0 -p ${PORT:-3000} -e ${RAILS_ENV}"]
